@@ -1,19 +1,23 @@
 pipeline {
-    agent any // 1- Execute this Pipeline or any of its stages, on any available agent.
+    agent any
+    options {
+        skipStagesAfterUnstable()
+    }
     stages {
-        stage('Build') { // 2- Defines the "Build" stage.
+        stage('Build') {
             steps {
-                // 3- Perform some steps related to the "Build" stage.
+                sh 'make'
             }
         }
-        stage('Test') { // 4- Defines the "Test" stage.
+        stage('Test') {
             steps {
-                // 5- Perform some steps related to the "Test" stage.
+                sh 'make check'
+                junit 'reports/**/*.xml'
             }
         }
-        stage('Deploy') { // 6- Defines the "Deploy" stage.
+        stage('Deploy') { 
             steps {
-                // 7 - Perform some steps related to the "Deploy" stage.
+               sh 'make publish'
             }
         }
     }
